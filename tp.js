@@ -1,57 +1,46 @@
 // --- START --- : Clases de tipo Lista
 
-/*abstract*/ class Lista{          
-    listaProductos;
+class Lista {          
+    listaProductos = [];
 
-    /*abstract*/ agregarProducto(producto);
+    agregarProducto(producto) {
+        this.listaProductos.push(producto);
+    }
 
-    /*abstract*/ buscarProducto();
+    // buscarProducto();
 
-    /*abstract*/ modificarProducto();
+    // modificarProducto();
 }
 
-class Stock extends Lista{
-    
-    constructor(){
-        super();
-    }
-
-    agregarProducto(producto){
+class Stock extends Lista {
+    buscarProducto() {
         //...
     }
 
-    buscarProducto(){
+    modificarProducto() {
         //...
     }
 
-    modificarProducto(){
+    actualizarStock() {
         //...
     }
 
-    actualizarStock(){
-        //...
-    }
-
-    mostrarStock(){
+    mostrarStock() {
         //...
     }
 }
 
-class Carrito extends Lista{
+class Carrito extends Lista {
 
-    agregarProducto(producto){
+    buscarProducto() {
         //...
     }
 
-    buscarProducto(){
+    modificarProducto() {
         //...
     }
 
-    modificarProducto(){
-        //...
-    }
-
-    quitarProducto(){
+    quitarProducto() {
         //...
     }
 }
@@ -59,127 +48,127 @@ class Carrito extends Lista{
 
 // --- START --- : Clases de Tipo productos
 
-class Producto{
+class Producto {
     #id;
     nombre;
     costo;
     cantidad;
+    static #ultimoId = 0;
 
-    constructor(id, nombre, costo, cantidad){
-        this.#id = id;
+    constructor(nombre, costo, cantidad) {
+        Producto.#ultimoId += 1;
+        this.#id = Producto.#ultimoId;
         this.nombre = nombre;
         this.costo = costo;
         this.cantidad = cantidad;
     }
 
-    get nombre(){
-        return this.nombre;
-    }
-    set nombre(nombre){
-        this.nombre = nombre;
+    get id() {
+        return this.#id;
     }
 
-    get costo(){
-        return this.costo;
-    }
-    set costo(costo){
-        this.costo = costo;
+    set costo(costo) {
+        if (costo > 0) {
+            this.costo = costo;
+        } else {
+            console.log("Valor para el costo incorrecto");
+        }
     }
 
-    get cantidad(){
-        return this.cantidad;
-    }
-    set cantidad(cantidad){
-        this.cantidad = cantidad;
+    set cantidad(cantidad) {
+        if (cantidad > 0) {
+            this.cantidad = cantidad;
+        } else {
+            console.log("Valor para la cantidad incorrecto");
+        }
     }
 
 }
 
-class ProductoLineaBlanca extends Producto{
+class ProductoLineaBlanca extends Producto {
     dimensiones;
 
-    constructor(id, nombre, costo, cantidad, dimensiones){
-        super(id, nombre, costo, cantidad);
-        this.dimensiones = dimensiones;
-    }
-
-    get dimensiones(){
-        return this.dimensiones;
-    }
-    set dimensiones(dimensiones){
+    constructor(nombre, costo, cantidad, dimensiones) {
+        super(nombre, costo, cantidad);
         this.dimensiones = dimensiones;
     }
 }
 
-class ProductoPerecedero extends Producto{
+class ProductoPerecedero extends Producto {
     fechaCaducidad;
 
-    constructor(id, nombre, costo, cantidad, fechaCaducidad){
-        super(id, nombre, costo, cantidad);
-        this.fechaCaducidad = fechaCaducidad;
+    constructor(nombre, costo, cantidad, fechaCaducidad) {
+        super(nombre, costo, cantidad);
+        this.fecha = fechaCaducidad;
     }
-
-    get fechaCaducidad(){
-        return this.fechaCaducidad;
+    
+    set fecha(fecha) {
+        let fechaArr = fecha.split("/");
+        if (fechaArr.length == 3) {
+            let fechaParse = Date.parse(`${fechaArr[1]}/${fechaArr[0]}/${fechaArr[2]}`);
+            if (isNaN(fechaParse)) {
+                console.log("Fecha Invalida");
+            } else {
+                if (fechaParse - Date.now() > 0) {
+                    this.fechaCaducidad = fecha;
+                } else {
+                    console.log("Este producto ya vencio!");
+                }
+            }
+        } else {
+            console.log("Fecha Invalida");
+        }
     }
-    set fechaCaducidad(fecha){
-        this.fechaCaducidad = fecha;
-    }
-
 }
 
-class ProductoPerecederoRefrigeracion extends ProductoPerecedero{
+class ProductoPerecederoRefrigeracion extends ProductoPerecedero {
     tipoRefrigeracion;
 
-    constructor(id, nombre, costo, cantidad, fechaCaducidad, tipoRefrigeracion){
-        super(id, nombre, costo, cantidad, fechaCaducidad);
+    constructor(nombre, costo, cantidad, fechaCaducidad, tipoRefrigeracion) {
+        super(nombre, costo, cantidad, fechaCaducidad);
         this.tipoRefrigeracion = tipoRefrigeracion;
-    }
-
-    get tipoRefrigeracion(){
-        return this.tipoRefrigeracion;
-    }
-    set tipoRefrigeracion(tipo){
-        this.tipoRefrigeracion = tipo;
     }
 }
 
 
 // --- START --- : Clases Auxiliares
 
-class Dimensiones{
+class Dimensiones {
     alto;
     ancho;
     profundidad;
 
-    constructor(alto, ancho, profundidad){
+    constructor(alto, ancho, profundidad) {
         this.alto = alto;
         this.ancho = ancho;
         this.profundidad = profundidad;
     }
 
-    get alto(){
-        return this.alto;
-    }
-    set alto(medida){
-        this.alto = medida;
-    }
-
-    get ancho(){
-        return this.ancho;
-    }
-    set ancho(medida){
-        this.ancho = medida;
+    set alto(medida) {
+        if (medida > 0) {
+            this.alto = medida;
+        } else {
+            console.log("La medida es invalida");
+        }
     }
 
-    get profundidad(){
-        return this.profundidad;
-    }
-    set profundidad(medida){
-        this.profundidad = medida;
+    set ancho(medida) {
+        if (medida > 0) {
+            this.ancho = medida;
+        } else {
+            console.log("La medida es invalida");
+        }
     }
 
-    imprimirDimensiones(){
+    set profundidad(medida) {
+        if (medida > 0) {
+            this.profundidad = medida;
+        } else {
+            console.log("La medida es invalida");
+        }
+    }
+
+    imprimirDimensiones() {
         return this.alto + "x" + this.ancho + "x" + this.profundidad;
     }
 }
