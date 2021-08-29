@@ -987,7 +987,7 @@
 											"top": 639,
 											"width": 133.63720703125,
 											"height": 13,
-											"text": "+setDimensiones()",
+											"text": "+getDimensiones()",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3664,7 +3664,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF7gwff6T9tQ8E="
 							},
-							"name": "setDimensiones"
+							"name": "getDimensiones"
 						}
 					]
 				},
