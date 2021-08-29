@@ -2080,13 +2080,30 @@
 											"height": 13,
 											"text": "+mostrarLista()",
 											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF7kndoFf4D9Pg=",
+											"_parent": {
+												"$ref": "AAAAAAF7gxu+4EDPra8="
+											},
+											"model": {
+												"$ref": "AAAAAAF7kndn9P4AbY0="
+											},
+											"font": "Arial;13;0",
+											"left": 341,
+											"top": 114,
+											"width": 126.4072265625,
+											"height": 13,
+											"text": "+agregarProductos()",
+											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 336,
 									"top": 64,
 									"width": 136.4072265625,
-									"height": 53
+									"height": 68
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -3922,6 +3939,14 @@
 								"$ref": "AAAAAAF7gxu+30DGT3k="
 							},
 							"name": "mostrarLista"
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF7kndn9P4AbY0=",
+							"_parent": {
+								"$ref": "AAAAAAF7gxu+30DGT3k="
+							},
+							"name": "agregarProductos"
 						}
 					],
 					"isAbstract": true
