@@ -1,5 +1,37 @@
 // --- START --- : Clases de tipo Lista
 
+class Cliente {
+    nombre;
+    apellido;
+    carrito;
+    constructor(nombre, apellido) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.carrito = new Carrito();
+    }
+
+    agregarProducto(producto, cantidad) {
+        this.carrito.agregarProducto(new ProductoEnCarrito(producto, cantidad));
+    }
+
+    verCarrito() {
+        this.carrito.mostrarCarrito();
+    }
+
+    buscarProductoEnCarrito(id) {
+        this.carrito.buscarProducto(id);
+    }
+
+    quitarProductoDelCarrito(id, razon) {
+        this.carrito.quitarProducto(id, razon);
+    }
+
+    comprar(stock) {
+        this.carrito.confirmarCompra(stock);
+    }
+
+}
+
 class Lista {          
     listaProductos = [];
 
@@ -124,6 +156,28 @@ class Carrito extends Lista {
 
     mostrarCarrito() {
         this.mostrarLista();
+    }
+
+    actualizarDatosCarrito(){
+        this.listaProductos.forEach( (item) => {
+            if(!item.validarDisponibilidad()){
+                this.quitarProducto(item, "[-] Cambio en el stock actual no permite compras con tal disponibilidad.");
+            }
+        });
+    }
+
+    confirmarCompra (stock) {
+        this.listaProductos.forEach(producto => {
+            let idProducto = producto.prod.id;
+            let cantidadCompra = producto.cantidadAniadida;
+            let prodEnStock = stock.buscarProducto(idProducto);
+            if (prodEnStock.cantidadProducto >= cantidadCompra) {
+                stock.actualizarStock(idProducto, -cantidadCompra);
+            } else {
+                console.log(`[-] No puede realizarse la compra del producto "${producto.prod.nombreProducto}" por falta de stock`);
+            }
+        });
+        this.listaProductos = [];
     }
 
 }
@@ -281,17 +335,16 @@ var producto1 = new Producto("Producto 1", 50, 30);
 var producto2 = new Producto("Producto 2", 20, 80);
 var producto3 = new Producto("Producto 3", 100, 35);
 var stock = new Stock();
-// stock.agregarProducto(producto1);
-// stock.agregarProducto(producto2);
-// stock.agregarProducto(producto3);
 stock.agregarProductos([producto1, producto2, producto3]);
-// stock.modificarProducto(2, "Producto dos", 40, -1);
 stock.actualizarStock(3, 5);
 stock.actualizarStock(1, 50);
-//stock.mostrarStock();
-var carrito = new Carrito();
-stock.agregarCarrito(carrito);
-carrito.agregarProducto(new ProductoEnCarrito(producto2, 10));
-stock.actualizarStock(producto2.id, -78);
+
+var cliente = new Cliente("Juan", "Perez");
+cliente.agregarProducto(producto1, 80);
+stock.actualizarStock(1, -1);
 stock.mostrarStock();
-carrito.mostrarCarrito();
+cliente.agregarProducto(producto2, 40);
+cliente.verCarrito();
+cliente.comprar(stock);
+cliente.verCarrito();
+stock.mostrarStock();
