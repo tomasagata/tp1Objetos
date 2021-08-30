@@ -1,9 +1,8 @@
 # tp1Objetos
 
-Faltantes:
-  - Codigo para carga, modificacion y eliminacion de Productos
-  - Modelar relacion entre Stock y Carrito
-  - Codificar Validacion Stock para codigo del carrito
+*Nuevos* Faltantes:
+  - Agregar una clase "Cliente" y/o "Transacciones" para administrar la compra
+  - Codigo para eliminar una cantidad determinada de productosAniadidos
   - Verificar UML
-  - Validar tipos de datos
-  - Tabajar con el objeto Error -> Para ver si lo usamos
+  - Validar tipos de datos 
+  - Tabajar con el objeto Error -> Para ver si lo usamos 
