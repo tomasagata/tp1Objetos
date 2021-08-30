@@ -5,3 +5,5 @@ Faltantes:
   - Modelar relacion entre Stock y Carrito
   - Codificar Validacion Stock para codigo del carrito
   - Verificar UML
+  - Validar tipos de datos
+  - Tabajar con el objeto Error -> Para ver si lo usamos
