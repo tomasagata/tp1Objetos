@@ -8,8 +8,8 @@ class Cliente {
     static #ultimoId = 0;
     
     constructor(nombre, apellido) {
-        Producto.#ultimoId += 1;
-        this.#id = Producto.#ultimoId;
+        Cliente.#ultimoId += 1;
+        this.#id = Cliente.#ultimoId;
         this.nombre = nombre;
         this.apellido = apellido;
         this.carrito = new Carrito();
@@ -27,8 +27,20 @@ class Cliente {
         this.carrito.mostrarCarrito();
     }
 
-    buscarProductoEnCarrito(id) {
-        this.carrito.buscarProducto(id);
+    buscarProductoPorId(id) {
+        return this.carrito.buscarProducto(id, this.carrito.buscarPorId);
+    }
+
+    buscarProductoPorNombre(nombre) {
+        return this.carrito.buscarProducto(nombre, this.carrito.buscarPorNombre);
+    }
+
+    buscarProductoPorCosto(costo) {
+        return this.carrito.buscarProducto(costo, this.carrito.buscarPorCosto);
+    }
+
+    buscarProductoPorCantidad(cantidad) {
+        return this.carrito.buscarProducto(cantidad, this.carrito.buscarPorCantidad);
     }
 
     quitarProductoDelCarrito(id, razon) {
@@ -52,9 +64,25 @@ class Lista {
         productos.forEach(producto => this.agregarProducto(producto));
     }
 
-    buscarProducto(id) {
-        let producto = this.listaProductos.filter(producto => producto.id == id)[0];
-        return producto == undefined ? "[-] No se ha podido encontrar el producto buscado" : producto;
+    buscarPorId(producto, id) {
+        return producto.id == id;
+    }
+
+    buscarPorNombre(producto, nombre) {
+        return producto.nombreProducto.includes(nombre);
+    }
+
+    buscarPorCosto(producto, costo) {
+        return producto.costoProducto == costo;
+    }
+
+    buscarPorCantidad(producto, cantidad) {
+        return producto.cantidadProducto == cantidad;
+    }
+
+    buscarProducto(elementoBuscado, callback) {
+        let producto = this.listaProductos.filter(producto => callback(producto, elementoBuscado));
+        return producto.length == 0 ? "[-] No se han podido encontrar productos" : producto;
     }
 
     mostrarLista() {
@@ -65,19 +93,18 @@ class Lista {
 class Stock extends Lista {
     listaProductos = [];
 
-    modificarProducto(id, nombre, costo/*, cantidad */) { //Elimino cantidad, por haber redundancia de codigo con actualizarStock() 
-        let producto = this.buscarProducto(id);
+    modificarProducto(id, nombre, costo) {
+        let producto = this.buscarProducto(id, this.buscarPorId)[0];
         if (typeof(producto) == 'string') {
             console.log(producto);
         } else {
             producto.nombreProducto = nombre == '' ? producto.nombreProducto : nombre;
             producto.costoProducto = costo == '' ? producto.costoProducto : costo;
-            //producto.cantidad = cantidad == '' ? producto.cantidadProducto : cantidad;
         }
     }
     
     actualizarStock(id, diferenciaStock) {
-        let producto = this.buscarProducto(id);
+        let producto = this.buscarProducto(id, this.buscarPorId)[0];
         if (typeof(producto) == 'string') {
             console.log(producto);
         } else {
@@ -109,7 +136,7 @@ class Carrito extends Lista {
     agregarProducto(productoEnCarrito) {
 
         if(productoEnCarrito != undefined){
-            var elem = this.buscarProducto(productoEnCarrito.prod.id, 0);
+            let elem = this.buscarProducto(productoEnCarrito.prod.id, this.buscarPorId, 0)[0];
             if(elem != undefined){
 
                 if(elem.cantidadAniadida + productoEnCarrito.cantidadAniadida <= productoEnCarrito.prod.cantidadProducto){
@@ -131,7 +158,6 @@ class Carrito extends Lista {
 
     //@Override
     agregarProductos(productosEnCarrito) {
-
         if(productosEnCarrito != undefined){
             productosEnCarrito.forEach((item) => {
                 this.agregarProducto(item);
@@ -140,9 +166,9 @@ class Carrito extends Lista {
     }
 
     //@Override
-    buscarProducto(id, flag /* opcional */) {
-        let producto = this.listaProductos.filter(producto => producto.prod.id == id)[0];
-        return producto == undefined && flag == undefined ? "[-] No se ha podido encontrar el producto buscado" : producto;
+    buscarProducto(elementoBuscado, callback, flag /* opcional */) {
+        let producto = this.listaProductos.filter(producto => callback(producto.prod, elementoBuscado));
+        return producto.length == 0 && flag == undefined ? "[-] No se han podido encontrar productos" : producto;
     }
 
     quitarProducto(id, razon /* Opcional */ ) {
@@ -179,7 +205,7 @@ class Carrito extends Lista {
         this.listaProductos.forEach(producto => {
             let idProducto = producto.prod.id;
             let cantidadCompra = producto.cantidadAniadida;
-            let prodEnStock = stock.buscarProducto(idProducto);
+            let prodEnStock = stock.buscarProducto(idProducto, stock.buscarPorId)[0];
             if (prodEnStock.cantidadProducto >= cantidadCompra) {
                 stock.actualizarStock(idProducto, -cantidadCompra);
             } else {
@@ -340,20 +366,25 @@ class Dimensiones {
 // --- START --- : Programa
 
 
-var producto1 = new Producto("Producto 1", 50, 30);
-var producto2 = new Producto("Producto 2", 20, 80);
-var producto3 = new Producto("Producto 3", 100, 35);
-var stock = new Stock();
+let producto1 = new Producto("Producto 1", 50, 30);
+let producto2 = new Producto("Producto 2", 20, 80);
+let producto3 = new Producto("Producto 3", 100, 35);
+let stock = new Stock();
 stock.agregarProductos([producto1, producto2, producto3]);
 stock.actualizarStock(3, 5);
 stock.actualizarStock(1, 50);
+console.log(stock.buscarProducto(1, stock.buscarPorId));
+console.log(stock.buscarProducto("2", stock.buscarPorNombre));
 
-var cliente = new Cliente("Juan", "Perez");
+let cliente = new Cliente("Juan", "Perez");
 cliente.agregarProducto(producto1, 80);
 stock.actualizarStock(1, -1);
-stock.mostrarStock();
+// stock.mostrarStock();
 cliente.agregarProducto(producto2, 40);
-cliente.verCarrito();
-cliente.comprar(stock);
-cliente.verCarrito();
-stock.mostrarStock();
+// cliente.verCarrito();
+// cliente.comprar(stock);
+// cliente.verCarrito();
+// stock.mostrarStock();
+
+console.log(cliente.buscarProductoPorId(1));
+console.log(cliente.buscarProductoPorCantidad(79));
