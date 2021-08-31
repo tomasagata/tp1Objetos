@@ -1,13 +1,22 @@
 // --- START --- : Clases de tipo Lista
 
 class Cliente {
+    #id;
     nombre;
     apellido;
     carrito;
+    static #ultimoId = 0;
+    
     constructor(nombre, apellido) {
+        Producto.#ultimoId += 1;
+        this.#id = Producto.#ultimoId;
         this.nombre = nombre;
         this.apellido = apellido;
         this.carrito = new Carrito();
+    }
+    
+    get id() {
+        return this.#id;
     }
 
     agregarProducto(producto, cantidad) {
