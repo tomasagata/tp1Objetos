@@ -140,7 +140,7 @@ class Carrito extends Lista {
             if(elem != undefined){
 
                 if(elem.cantidadAniadida + productoEnCarrito.cantidadAniadida <= productoEnCarrito.prod.cantidadProducto){
-                    this.elem.cantidadAniadida += productoEnCarrito.cantidadAniadida;
+                    elem.cantidadAniadida += productoEnCarrito.cantidadAniadida;
                 }
                 else{
                     console.log("[-] No hay suficientes productos disponibles para satisfacer el pedido");
@@ -367,24 +367,38 @@ class Dimensiones {
 
 
 let producto1 = new Producto("Producto 1", 50, 30);
-let producto2 = new Producto("Producto 2", 20, 80);
-let producto3 = new Producto("Producto 3", 100, 35);
+let producto2 = new ProductoPerecedero("Producto 2", 20, 80, "10/8/2021");
+producto2 = new ProductoPerecedero("Producto 2", 20, 80, "10/9/2021");
+let producto3 = new ProductoLineaBlanca("Producto 3", 100, 35, new Dimensiones(15, 20, 30));
 let stock = new Stock();
 stock.agregarProductos([producto1, producto2, producto3]);
+console.log("[+] Stock:");
+stock.mostrarStock();
+console.log("\n\n");
+
 stock.actualizarStock(3, 5);
 stock.actualizarStock(1, 50);
-console.log(stock.buscarProducto(1, stock.buscarPorId));
-console.log(stock.buscarProducto("2", stock.buscarPorNombre));
+console.log("[+] Stock Actualizado:");
+stock.mostrarStock();
+console.log("\n\n");
 
 let cliente = new Cliente("Juan", "Perez");
-cliente.agregarProducto(producto1, 80);
-stock.actualizarStock(1, -1);
-// stock.mostrarStock();
+console.log(cliente, "\n\n");
+cliente.agregarProducto(producto1, 40);
+cliente.agregarProducto(producto1, 40);
+cliente.agregarProducto(producto1, 40);
 cliente.agregarProducto(producto2, 40);
-// cliente.verCarrito();
-// cliente.comprar(stock);
-// cliente.verCarrito();
-// stock.mostrarStock();
 
-console.log(cliente.buscarProductoPorId(1));
-console.log(cliente.buscarProductoPorCantidad(79));
+console.log("[+] Carrito:");
+cliente.verCarrito();
+console.log("\n\n");
+
+stock.actualizarStock(1, -1);
+cliente.comprar(stock);
+console.log("[+] Carrito Actualizado:");
+cliente.verCarrito();
+
+console.log("[+] Stock Actualizado:");
+stock.mostrarStock();
+console.log("\n\n");
+
