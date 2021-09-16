@@ -383,7 +383,7 @@ stock.mostrarStock();
 console.log("\n\n");
 
 let cliente = new Cliente("Juan", "Perez");
-console.log(cliente, "\n\n");
+console.log("[+] Cliente:", cliente, "\n\n");
 cliente.agregarProducto(producto1, 40);
 cliente.agregarProducto(producto1, 40);
 cliente.agregarProducto(producto1, 40);
